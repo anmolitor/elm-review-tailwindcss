@@ -6,6 +6,7 @@ module TailwindCss.NoUnknownClasses exposing
 {-|
 
 @docs rule
+@docs Options, defaultOptions
 
 -}
 
@@ -14,7 +15,7 @@ import Elm.Syntax.Expression exposing (Expression)
 import Elm.Syntax.Node exposing (Node)
 import Review.Fix as Fix
 import Review.Rule as Rule exposing (Rule)
-import TailwindCss.CheckedFunction exposing (checkClassFunction, checkClassListFunction)
+import TailwindCss.CheckedFunction as CheckedFunction
 import TailwindCss.Internal as Internal
 
 
@@ -24,7 +25,7 @@ import TailwindCss.Internal as Internal
         [ TailwindCss.NoUnknownClasses.rule { order = classOrder, checkedFunctions = [checkClassFunction] }
         ]
 
-    It is not recommended to define the `order` option manually. Instead you can use the postcss-plugin (TODO add link)
+    It is not recommended to define the `order` option manually. Instead you can use the [postcss-plugin](https://www.npmjs.com/package/elm-review-tailwindcss-postcss-plugin)
     to generate the Elm code for you and then you can just import the `classOrder` in your `ReviewConfig.elm` file.
 
 
@@ -63,16 +64,24 @@ rule options =
         |> Rule.fromModuleRuleSchema
 
 
+{-| Options for the NoUnknownClasses rule.
+
+    order:               should be generated from the postcss plugin
+    checkedFunctions:    a list of function calls to check for unknown class usages
+
+-}
 type alias Options =
     { order : Internal.Order
     , checkedFunctions : List Internal.CheckedFunction
     }
 
 
+{-| Provide required options and defaults the other options
+-}
 defaultOptions : { order : Internal.Order } -> Options
 defaultOptions { order } =
     { order = order
-    , checkedFunctions = [ checkClassFunction, checkClassListFunction ]
+    , checkedFunctions = [ CheckedFunction.class, CheckedFunction.classList ]
     }
 
 

@@ -13,7 +13,8 @@ type alias Order =
 
 type CheckedFunctionArg
     = LiteralArg
-    | ListOfLiteralsArg
+    | ListArg CheckedFunctionArg
+    | TupleArg (List (Maybe CheckedFunctionArg))
 
 
 type alias CheckedFunction =
@@ -24,10 +25,10 @@ type alias CheckedFunction =
 
 
 expressionVisitor :
-    ({ ctx | order : Order, checkedFunctions : List CheckedFunction } -> Range -> String -> List (Rule.Error {}))
+    ({ ctx | checkedFunctions : List CheckedFunction } -> Range -> String -> List (Rule.Error {}))
     -> Node Expression
-    -> { ctx | order : Order, checkedFunctions : List CheckedFunction }
-    -> ( List (Rule.Error {}), { ctx | order : Order, checkedFunctions : List CheckedFunction } )
+    -> { ctx | checkedFunctions : List CheckedFunction }
+    -> ( List (Rule.Error {}), { ctx | checkedFunctions : List CheckedFunction } )
 expressionVisitor runCheck node context =
     case Node.value node of
         Application (fun :: args) ->
@@ -46,20 +47,36 @@ expressionVisitor runCheck node context =
 
                                         Just mod ->
                                             mod == funModName
+
+                                extractArgs argExtractor arg =
+                                    case ( argExtractor, Node.value arg ) of
+                                        ( Just LiteralArg, Literal classString ) ->
+                                            [ ( Node.range arg, classString ) ]
+
+                                        ( Just (ListArg listArgExtractor), ListExpr exprs ) ->
+                                            List.concatMap (extractArgs (Just listArgExtractor)) exprs
+
+                                        ( Just (TupleArg tupleArgExtractors), TupledExpression exprs ) ->
+                                            if List.length tupleArgExtractors == List.length exprs then
+                                                List.map2
+                                                    extractArgs
+                                                    tupleArgExtractors
+                                                    exprs
+                                                    |> List.concat
+
+                                            else
+                                                []
+
+                                        _ ->
+                                            []
                             in
                             if functionName == funName && moduleMatch && List.length arguments == List.length args then
                                 ( List.map2
-                                    (\argExtractor arg ->
-                                        case ( argExtractor, Node.value arg ) of
-                                            ( Just LiteralArg, Literal classString ) ->
-                                                runCheck context (Node.range arg) classString
-
-                                            _ ->
-                                                []
-                                    )
+                                    extractArgs
                                     arguments
                                     args
                                     |> List.concat
+                                    |> List.concatMap (\( range, classString ) -> runCheck context range classString)
                                 , context
                                 )
 
@@ -107,5 +124,33 @@ unknownClassesError unknownClassNames =
 The above list of classes were not in that list. You can probably just delete the classes and move on.
 When in doubt, rerun postcss and elm-review or look for the classes in your stylesheets."""
         , "If you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
+        ]
+    }
+
+
+cssConflictError : { conflictingClasses : ( String, String ), conflictingProperties : List String } -> { message : String, details : List String }
+cssConflictError { conflictingClasses, conflictingProperties } =
+    let
+        ( class1, class2 ) =
+            conflictingClasses
+
+        formattedCssPropertyList =
+            List.map (\className -> "'" ++ className ++ "'") conflictingProperties |> String.join ", "
+
+        propertiesPlural =
+            if List.length conflictingProperties > 1 then
+                "properties"
+
+            else
+                "property"
+
+        message =
+            "Css classes '" ++ class1 ++ "' and '" ++ class2 ++ "' both set the same css " ++ propertiesPlural ++ " " ++ formattedCssPropertyList ++ ". Delete one of them."
+    in
+    { message = message
+    , details =
+        [ "This makes it hard to reason about which style actually applies at runtime and in some cases it can depend on things like the order of declarations in your css file."
+        , "Try to make your classes smaller and more modular or alternatively, duplicate styles where necessary instead of overriding other classes."
+        , "This is a pretty strict rule. If you have usecases where this makes sense, you should probably disable the rule and move on."
         ]
     }

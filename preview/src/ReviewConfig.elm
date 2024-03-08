@@ -15,11 +15,12 @@ import Review.Rule exposing (Rule)
 import TailwindCss.ConsistentClassOrder
 import TailwindCss.NoCssConflict
 import TailwindCss.NoUnknownClasses
+import TailwindCss.ClassOrder exposing (classOrder, classProps)
 
 
 config : List Rule
 config =
-    [ TailwindCss.ConsistentClassOrder.rule
-    , TailwindCss.NoCssConflict.rule
-    , TailwindCss.NoUnknownClasses.rule
+    [ TailwindCss.ConsistentClassOrder.rule (TailwindCss.ConsistentClassOrder.defaultOptions { order = classOrder })
+    , TailwindCss.NoCssConflict.rule (TailwindCss.NoCssConflict.defaultOptions { props = classProps })
+    , TailwindCss.NoUnknownClasses.rule (TailwindCss.NoUnknownClasses.defaultOptions { order = classOrder })
     ]
