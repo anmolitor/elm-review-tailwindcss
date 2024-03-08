@@ -1,0 +1,16 @@
+{
+  "name": "elm-review-tailwindcss-postcss-plugin",
+  "type": "module",
+  "main": "src/index.js",
+  "types": "dist/index.d.ts",
+  "version": "1.0.0",
+  "scripts": {},
+  "dependencies": {
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1"
+  },
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "typescript": "^5.4.2"
+  }
+}
