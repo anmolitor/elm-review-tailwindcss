@@ -58,7 +58,7 @@ function plugin(options = {}) {
       const selector = decl.parent.selector;
       const className = selectorToTailwindClassName(selector);
       // ignore custom properties
-      if (decl.prop.startsWith("--")) {
+      if (decl.prop.startsWith("--") || !className) {
         return;
       }
       const previousProps = tailwindClassesAndAffectedProps.get(className);
@@ -147,10 +147,11 @@ classProps =
 /**
  *
  * @param {string} selector
+ * @returns {string | undefined}
  */
 function selectorToTailwindClassName(selector) {
   if (!selector.startsWith(".")) {
-    return "";
+    return undefined;
   }
   let className = "";
   let escape = false;
