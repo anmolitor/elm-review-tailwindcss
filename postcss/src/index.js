@@ -126,7 +126,7 @@ classOrder =
 {-| A Dict containing all classes declared in your css files with associated css properties for
     conflict detection.
 -}
-classProps : Dict.Dict String (Set String)
+classProps : Dict.Dict String (Set.Set String)
 classProps = 
     Dict.fromList 
         [ ${Array.from(tailwindClassesAndAffectedProps.entries())

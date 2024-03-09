@@ -1,0 +1,15 @@
+{
+  "name": "elm-review-tailwindcss-integration",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "start": "vite"
+  },
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.1.5",
+    "vite-plugin-elm": "^3.0.0"
+  }
+}
