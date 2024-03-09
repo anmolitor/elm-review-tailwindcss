@@ -61,6 +61,12 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Run integration test
+        run: |
+          cd integration
+          npm ci
+          ./run-integration-test.sh
+
   publish:
     needs: [test] # make sure all your other jobs succeed before trying to publish
 
