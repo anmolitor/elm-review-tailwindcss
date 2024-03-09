@@ -1,10 +1,17 @@
 #!/usr/bin/env node
 
-const path = require('path');
-const Ansi = require('./helpers/ansi');
-const {execSync} = require('child_process');
-const {findPreviewConfigurations} = require('./helpers/find-configurations');
-const packageDependencies = require('../elm.json').dependencies;
+import { execSync } from "child_process";
+import { createRequire } from "module";
+import * as path from "path";
+import * as url from "url";
+import * as Ansi from "./helpers/ansi.js";
+import { findPreviewConfigurations } from "./helpers/find-configurations.js";
+
+const localRequire = createRequire(url.fileURLToPath(import.meta.url));
+
+const packageDependencies = localRequire("../elm.json").dependencies;
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const root = path.dirname(__dirname);
 
@@ -13,7 +20,9 @@ const root = path.dirname(__dirname);
 findPreviewConfigurations().forEach(checkThatExampleCompiles);
 
 function checkThatExampleCompiles(exampleConfiguration) {
-  const exampleConfigurationElmJson = require(`${exampleConfiguration}/elm.json`);
+  const exampleConfigurationElmJson = localRequire(
+    `${exampleConfiguration}/elm.json`
+  );
 
   checkDepsAreCompatible(
     path.basename(exampleConfiguration),
@@ -22,9 +31,9 @@ function checkThatExampleCompiles(exampleConfiguration) {
 
   try {
     execSync(`npx elm-review --config ${exampleConfiguration} --report=json`, {
-      encoding: 'utf8',
-      stdio: 'pipe',
-      cwd: path.resolve(__dirname, '..')
+      encoding: "utf8",
+      stdio: "pipe",
+      cwd: path.resolve(__dirname, ".."),
     }).toString();
     success(exampleConfiguration);
   } catch (error) {
@@ -33,9 +42,9 @@ function checkThatExampleCompiles(exampleConfiguration) {
       // We don't care whether there were any reported errors.
       // If the root type is not "error", then the configuration compiled
       // successfully, which is all we care about in this test.
-      if (output.type !== 'review-errors') {
+      if (output.type !== "review-errors") {
         console.log(
-          `${Ansi.red('✖')} ${Ansi.yellow(
+          `${Ansi.red("✖")} ${Ansi.yellow(
             `${path.relative(root, exampleConfiguration)}/`
           )} does not compile.`
         );
@@ -62,7 +71,7 @@ and make the necessary changes to make it compile.`
 }
 
 function success(config) {
-  console.log(`${Ansi.green('✔')} ${path.relative(root, config)}/ compiles`);
+  console.log(`${Ansi.green("✔")} ${path.relative(root, config)}/ compiles`);
 }
 
 function checkDepsAreCompatible(exampleConfiguration, previewDependencies) {
@@ -93,7 +102,7 @@ function checkDepsAreCompatible(exampleConfiguration, previewDependencies) {
 }
 
 function checkConstraint(exampleConfiguration, depName, constraint, version) {
-  const [minVersion] = constraint.split(' <= v < ').map(splitVersion);
+  const [minVersion] = constraint.split(" <= v < ").map(splitVersion);
   const previewVersion = splitVersion(version);
   const isValid =
     previewVersion[0] === minVersion[0] &&
@@ -109,5 +118,5 @@ function checkConstraint(exampleConfiguration, depName, constraint, version) {
 }
 
 function splitVersion(version) {
-  return version.split('.').map((n) => Number.parseInt(n, 10));
+  return version.split(".").map((n) => Number.parseInt(n, 10));
 }
