@@ -17,6 +17,7 @@ import Review.Rule as Rule exposing (Rule)
 import Set exposing (Set)
 import TailwindCss.CheckedFunction as CheckedFunction
 import TailwindCss.Internal as Internal
+import TailwindCss.CheckedFunction exposing (CheckedFunction)
 
 
 {-| Reports if two classes in a class list modify the same css properties.
@@ -72,7 +73,7 @@ rule options =
 -}
 type alias Options =
     { props : Dict String (Set String)
-    , checkedFunctions : List Internal.CheckedFunction
+    , checkedFunctions : List CheckedFunction
     }
 
 
@@ -87,7 +88,7 @@ defaultOptions { props } =
 
 type alias Context =
     { props : Dict String (Set String)
-    , checkedFunctions : List Internal.CheckedFunction
+    , checkedFunctions : List CheckedFunction
     }
 
 
@@ -116,28 +117,25 @@ expressionVisitor =
                             )
                         )
                         classNames
-
-                conflicts =
-                    uniquePairs classNamePropTuples
-                        |> List.concatMap
-                            (\( ( className1, props1 ), ( className2, props2 ) ) ->
-                                let
-                                    propsIntersection =
-                                        Set.intersect props1 props2
-                                in
-                                if Set.isEmpty propsIntersection then
-                                    []
-
-                                else
-                                    [ Rule.error
-                                        (Internal.cssConflictError
-                                            { conflictingClasses = ( className1, className2 ), conflictingProperties = Set.toList propsIntersection }
-                                        )
-                                        range
-                                    ]
-                            )
             in
-            conflicts
+            uniquePairs classNamePropTuples
+                |> List.concatMap
+                    (\( ( className1, props1 ), ( className2, props2 ) ) ->
+                        let
+                            propsIntersection =
+                                Set.intersect props1 props2
+                        in
+                        if Set.isEmpty propsIntersection then
+                            []
+
+                        else
+                            [ Rule.error
+                                (Internal.cssConflictError
+                                    { conflictingClasses = ( className1, className2 ), conflictingProperties = Set.toList propsIntersection }
+                                )
+                                range
+                            ]
+                    )
     in
     Internal.expressionVisitor runCheck
 

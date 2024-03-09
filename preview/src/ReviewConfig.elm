@@ -12,10 +12,10 @@ when inside the directory containing this file.
 -}
 
 import Review.Rule exposing (Rule)
+import TailwindCss.ClassOrder exposing (classOrder, classProps)
 import TailwindCss.ConsistentClassOrder
 import TailwindCss.NoCssConflict
 import TailwindCss.NoUnknownClasses
-import TailwindCss.ClassOrder exposing (classOrder, classProps)
 
 
 config : List Rule

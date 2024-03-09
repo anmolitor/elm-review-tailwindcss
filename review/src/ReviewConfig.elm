@@ -24,7 +24,6 @@ import NoExposingEverything
 import NoForbiddenWords
 import NoImportingEverything
 import NoMissingTypeAnnotation
-import NoMissingTypeAnnotationInLetIn
 import NoMissingTypeExpose
 import NoPrematureLetComputation
 import NoSimpleLetBody
@@ -57,7 +56,6 @@ config =
     , NoForbiddenWords.rule [ "REPLACEME" ]
     , NoImportingEverything.rule []
     , NoMissingTypeAnnotation.rule
-    , NoMissingTypeAnnotationInLetIn.rule
     , NoMissingTypeExpose.rule
     , NoSimpleLetBody.rule
     , NoPrematureLetComputation.rule

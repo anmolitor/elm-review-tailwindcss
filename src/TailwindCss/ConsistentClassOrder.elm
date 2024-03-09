@@ -11,11 +11,11 @@ module TailwindCss.ConsistentClassOrder exposing
 -}
 
 import Dict exposing (Dict)
-import Elm.Syntax.Expression exposing (Expression(..))
+import Elm.Syntax.Expression exposing (Expression)
 import Elm.Syntax.Node exposing (Node)
 import Review.Fix as Fix
 import Review.Rule as Rule exposing (Rule)
-import TailwindCss.CheckedFunction as CheckedFunction
+import TailwindCss.CheckedFunction as CheckedFunction exposing (CheckedFunction)
 import TailwindCss.Internal as Internal
 
 
@@ -76,7 +76,7 @@ rule order =
 -}
 type alias Options =
     { order : Dict String Int
-    , checkedFunctions : List Internal.CheckedFunction
+    , checkedFunctions : List CheckedFunction
     }
 
 
@@ -91,7 +91,7 @@ defaultOptions { order } =
 
 type alias Context =
     { order : Dict String Int
-    , checkedFunctions : List Internal.CheckedFunction
+    , checkedFunctions : List CheckedFunction
     }
 
 

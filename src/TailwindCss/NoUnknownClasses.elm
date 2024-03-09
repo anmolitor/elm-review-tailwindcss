@@ -10,12 +10,12 @@ module TailwindCss.NoUnknownClasses exposing
 
 -}
 
-import Dict
+import Dict exposing (Dict)
 import Elm.Syntax.Expression exposing (Expression)
 import Elm.Syntax.Node exposing (Node)
 import Review.Fix as Fix
 import Review.Rule as Rule exposing (Rule)
-import TailwindCss.CheckedFunction as CheckedFunction
+import TailwindCss.CheckedFunction as CheckedFunction exposing (CheckedFunction)
 import TailwindCss.Internal as Internal
 
 
@@ -71,14 +71,14 @@ rule options =
 
 -}
 type alias Options =
-    { order : Internal.Order
-    , checkedFunctions : List Internal.CheckedFunction
+    { order : Dict String Int
+    , checkedFunctions : List CheckedFunction
     }
 
 
 {-| Provide required options and defaults the other options
 -}
-defaultOptions : { order : Internal.Order } -> Options
+defaultOptions : { order : Dict String Int } -> Options
 defaultOptions { order } =
     { order = order
     , checkedFunctions = [ CheckedFunction.class, CheckedFunction.classList ]
@@ -86,8 +86,8 @@ defaultOptions { order } =
 
 
 type alias Context =
-    { order : Internal.Order
-    , checkedFunctions : List Internal.CheckedFunction
+    { order : Dict String Int
+    , checkedFunctions : List CheckedFunction
     }
 
 

@@ -1,27 +1,11 @@
-module TailwindCss.Internal exposing (..)
+module TailwindCss.Internal exposing (consistentClassOrderError, cssConflictError, expressionVisitor, unknownClassesError)
 
-import Dict exposing (Dict)
 import Elm.Syntax.Expression exposing (Expression(..))
+import Elm.Syntax.ModuleName exposing (ModuleName)
 import Elm.Syntax.Node as Node exposing (Node)
 import Elm.Syntax.Range exposing (Range)
 import Review.Rule as Rule
-
-
-type alias Order =
-    Dict String Int
-
-
-type CheckedFunctionArg
-    = LiteralArg
-    | ListArg CheckedFunctionArg
-    | TupleArg (List (Maybe CheckedFunctionArg))
-
-
-type alias CheckedFunction =
-    { functionName : String
-    , moduleName : Maybe (List String)
-    , arguments : List (Maybe CheckedFunctionArg)
-    }
+import TailwindCss.CheckedFunction exposing (CheckedFunction, CheckedFunctionArg(..))
 
 
 expressionVisitor :
@@ -30,10 +14,10 @@ expressionVisitor :
     -> { ctx | checkedFunctions : List CheckedFunction }
     -> ( List (Rule.Error {}), { ctx | checkedFunctions : List CheckedFunction } )
 expressionVisitor runCheck node context =
-    case Node.value node of
-        Application (fun :: args) ->
+    case matchFunction node of
+        Just function ->
             let
-                helper funModName funName checkedFunctions =
+                helper checkedFunctions =
                     case checkedFunctions of
                         [] ->
                             ( [], context )
@@ -46,52 +30,64 @@ expressionVisitor runCheck node context =
                                             True
 
                                         Just mod ->
-                                            mod == funModName
-
-                                extractArgs argExtractor arg =
-                                    case ( argExtractor, Node.value arg ) of
-                                        ( Just LiteralArg, Literal classString ) ->
-                                            [ ( Node.range arg, classString ) ]
-
-                                        ( Just (ListArg listArgExtractor), ListExpr exprs ) ->
-                                            List.concatMap (extractArgs (Just listArgExtractor)) exprs
-
-                                        ( Just (TupleArg tupleArgExtractors), TupledExpression exprs ) ->
-                                            if List.length tupleArgExtractors == List.length exprs then
-                                                List.map2
-                                                    extractArgs
-                                                    tupleArgExtractors
-                                                    exprs
-                                                    |> List.concat
-
-                                            else
-                                                []
-
-                                        _ ->
-                                            []
+                                            mod == function.moduleName
                             in
-                            if functionName == funName && moduleMatch && List.length arguments == List.length args then
+                            if functionName == function.name && moduleMatch && List.length arguments == List.length function.args then
                                 ( List.map2
                                     extractArgs
                                     arguments
-                                    args
+                                    function.args
                                     |> List.concat
                                     |> List.concatMap (\( range, classString ) -> runCheck context range classString)
                                 , context
                                 )
 
                             else
-                                helper funModName funName rest
+                                helper rest
             in
+            helper context.checkedFunctions
+
+        Nothing ->
+            ( [], context )
+
+
+matchFunction : Node Expression -> Maybe { args : List (Node Expression), name : String, moduleName : ModuleName }
+matchFunction node =
+    case Node.value node of
+        Application (fun :: args) ->
             case Node.value fun of
-                FunctionOrValue funModName funName ->
-                    helper funModName funName context.checkedFunctions
+                FunctionOrValue moduleName name ->
+                    Just { args = args, name = name, moduleName = moduleName }
 
                 _ ->
-                    ( [], context )
+                    Nothing
 
         _ ->
-            ( [], context )
+            Nothing
+
+
+extractArgs : Maybe CheckedFunctionArg -> Node Expression -> List ( Range, String )
+extractArgs argExtractor arg =
+    case ( argExtractor, Node.value arg ) of
+        ( Just LiteralArg, Literal classString ) ->
+            [ ( Node.range arg, classString ) ]
+
+        ( Just (ListArg listArgExtractor), ListExpr exprs ) ->
+            List.concatMap (extractArgs (Just listArgExtractor)) exprs
+
+        ( Just (TupleArg tupleArgExtractors), TupledExpression exprs ) ->
+            if List.length tupleArgExtractors == List.length exprs then
+                List.map2
+                    extractArgs
+                    tupleArgExtractors
+                    exprs
+                    |> List.concat
+
+            else
+                []
+
+        _ ->
+            []
 
 
 consistentClassOrderError : { message : String, details : List String }
