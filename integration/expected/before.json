@@ -8,27 +8,27 @@
     ],
     "region": {
       "start": {
-        "line": 34,
-        "column": 55
+        "line": 32,
+        "column": 28
       },
       "end": {
-        "line": 34,
-        "column": 71
+        "line": 32,
+        "column": 73
       }
     },
     "fix": [
       {
         "range": {
           "start": {
-            "line": 34,
-            "column": 55
+            "line": 32,
+            "column": 28
           },
           "end": {
-            "line": 34,
-            "column": 71
+            "line": 32,
+            "column": 73
           }
         },
-        "string": "\"block bg-black\""
+        "string": "\"mx-8xl flex items-center justify-center p-4\""
       }
     ],
     "formatted": [
@@ -40,12 +40,12 @@
         "string": "TailwindCss.ConsistentClassOrder",
         "color": "#FF0000"
       },
-      ": Order css class names in a consistent way to improve readability.\n\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                          ",
+      ": Order css class names in a consistent way to improve readability.\n\n31|     , body =\n32|         [ Html.div [ class \"justify-center p-4 items-center flex mx-8xl\" ]\n                               ",
       {
-        "string": "^^^^^^^^^^^^^^^^",
+        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
         "color": "#FF0000"
       },
-      "\n35|             ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
+      "\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
     ],
     "suppressed": false,
     "originallySuppressed": false
@@ -110,27 +110,27 @@
     ],
     "region": {
       "start": {
-        "line": 32,
-        "column": 28
+        "line": 34,
+        "column": 55
       },
       "end": {
-        "line": 32,
-        "column": 73
+        "line": 34,
+        "column": 71
       }
     },
     "fix": [
       {
         "range": {
           "start": {
-            "line": 32,
-            "column": 28
+            "line": 34,
+            "column": 55
           },
           "end": {
-            "line": 32,
-            "column": 73
+            "line": 34,
+            "column": 71
           }
         },
-        "string": "\"mx-8xl flex items-center justify-center p-4\""
+        "string": "\"block bg-black\""
       }
     ],
     "formatted": [
@@ -142,12 +142,12 @@
         "string": "TailwindCss.ConsistentClassOrder",
         "color": "#FF0000"
       },
-      ": Order css class names in a consistent way to improve readability.\n\n31|     , body =\n32|         [ Html.div [ class \"justify-center p-4 items-center flex mx-8xl\" ]\n                               ",
+      ": Order css class names in a consistent way to improve readability.\n\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                          ",
       {
-        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "string": "^^^^^^^^^^^^^^^^",
         "color": "#FF0000"
       },
-      "\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
+      "\n35|             ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
     ],
     "suppressed": false,
     "originallySuppressed": false
@@ -181,57 +181,6 @@
         "color": "#FF0000"
       },
       "\n35|             ]\n\nThis makes it hard to reason about which style actually applies at runtime and in some cases it can depend on things like the order of declarations in your css file.\n\nTry to make your classes smaller and more modular or alternatively, duplicate styles where necessary instead of overriding other classes.\n\nThis is a pretty strict rule. If you have usecases where this makes sense, you should probably disable the rule and move on."
-    ],
-    "suppressed": false,
-    "originallySuppressed": false
-  },
-  {
-    "rule": "TailwindCss.NoUnknownClasses",
-    "message": "Css class 'unknown' is not in your stylesheet.",
-    "details": [
-      "Assuming things are setup correctly, all your stylesheets went into postcss and our postcss plugin generated a list of valid classes.\nThe above list of classes were not in that list. You can probably just delete the classes and move on.\nWhen in doubt, rerun postcss and elm-review or look for the classes in your stylesheets.",
-      "If you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
-    ],
-    "region": {
-      "start": {
-        "line": 34,
-        "column": 83
-      },
-      "end": {
-        "line": 34,
-        "column": 96
-      }
-    },
-    "fix": [
-      {
-        "range": {
-          "start": {
-            "line": 34,
-            "column": 83
-          },
-          "end": {
-            "line": 34,
-            "column": 96
-          }
-        },
-        "string": "\"m-4\""
-      }
-    ],
-    "formatted": [
-      {
-        "string": "(fix) ",
-        "color": "#33BBC8"
-      },
-      {
-        "string": "TailwindCss.NoUnknownClasses",
-        "color": "#FF0000"
-      },
-      ": Css class 'unknown' is not in your stylesheet.\n\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                                                      ",
-      {
-        "string": "^^^^^^^^^^^^^",
-        "color": "#FF0000"
-      },
-      "\n35|             ]\n\nAssuming things are setup correctly, all your stylesheets went into postcss and our postcss plugin generated a list of valid classes.\nThe above list of classes were not in that list. You can probably just delete the classes and move on.\nWhen in doubt, rerun postcss and elm-review or look for the classes in your stylesheets.\n\nIf you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
     ],
     "suppressed": false,
     "originallySuppressed": false
@@ -283,6 +232,57 @@
         "color": "#FF0000"
       },
       "\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n\nAssuming things are setup correctly, all your stylesheets went into postcss and our postcss plugin generated a list of valid classes.\nThe above list of classes were not in that list. You can probably just delete the classes and move on.\nWhen in doubt, rerun postcss and elm-review or look for the classes in your stylesheets.\n\nIf you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
+    ],
+    "suppressed": false,
+    "originallySuppressed": false
+  },
+  {
+    "rule": "TailwindCss.NoUnknownClasses",
+    "message": "Css class 'unknown' is not in your stylesheet.",
+    "details": [
+      "Assuming things are setup correctly, all your stylesheets went into postcss and our postcss plugin generated a list of valid classes.\nThe above list of classes were not in that list. You can probably just delete the classes and move on.\nWhen in doubt, rerun postcss and elm-review or look for the classes in your stylesheets.",
+      "If you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
+    ],
+    "region": {
+      "start": {
+        "line": 34,
+        "column": 83
+      },
+      "end": {
+        "line": 34,
+        "column": 96
+      }
+    },
+    "fix": [
+      {
+        "range": {
+          "start": {
+            "line": 34,
+            "column": 83
+          },
+          "end": {
+            "line": 34,
+            "column": 96
+          }
+        },
+        "string": "\"m-4\""
+      }
+    ],
+    "formatted": [
+      {
+        "string": "(fix) ",
+        "color": "#33BBC8"
+      },
+      {
+        "string": "TailwindCss.NoUnknownClasses",
+        "color": "#FF0000"
+      },
+      ": Css class 'unknown' is not in your stylesheet.\n\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                                                      ",
+      {
+        "string": "^^^^^^^^^^^^^",
+        "color": "#FF0000"
+      },
+      "\n35|             ]\n\nAssuming things are setup correctly, all your stylesheets went into postcss and our postcss plugin generated a list of valid classes.\nThe above list of classes were not in that list. You can probably just delete the classes and move on.\nWhen in doubt, rerun postcss and elm-review or look for the classes in your stylesheets.\n\nIf you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
     ],
     "suppressed": false,
     "originallySuppressed": false
