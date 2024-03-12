@@ -7,13 +7,13 @@ set -o pipefail
 # Generate the application bundle and emit the review/src/TailwindCss/ClassOrder.elm file.
 npm run build
 # Initial run should report expected errors
-elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/before.json -
+npx elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/before.json -
 echo "Initial run went as expected."
 # Automatically fix all fixable errors
 yes | elm-review --fix-all || true
 echo "Fixable errors were fixed."
 # reports all errors that are not fixable
-elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/after.json -
+npx elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/after.json -
 echo "Second run went as expected."
 # Fixes are what we expected them to be
 diff src/Main.elm expected/Main.elm
