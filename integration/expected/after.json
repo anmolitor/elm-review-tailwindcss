@@ -22,7 +22,7 @@
         "string": "TailwindCss.NoCssConflict",
         "color": "#FF0000"
       },
-      ": Css classes 'p-2' and 'p-4' both set the same css property 'padding'. Delete one of them.\n\n33|             [ Html.h1 [ class \"known-class p-8\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"block bg-black\", True ), ( \"m-4\", False ) ] ] [ text \"Some text\" ]\n                                 ",
+      ": Css classes 'p-2' and 'p-4' both set the same css property 'padding'. Delete one of them.\n\n33|             [ Html.h1 [ class \"known-class w-48 p-8 peer-checked:left-0 bgd:bg-slate-500 sm:w-12 lg:w-24\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"block bg-black peer-open:hover:dark:right-0\", True ), ( \"m-4\", False ) ] ] [ text \"Some text\" ]\n                                 ",
       {
         "string": "^^^^^^^^^",
         "color": "#FF0000"
