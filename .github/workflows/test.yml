@@ -68,6 +68,8 @@ jobs:
         run: |
           cd integration
           npm ci
+          apt-get install jq -y
+          jq --version
           ./run-integration-test.sh
 
   publish-elm-review-rule:
