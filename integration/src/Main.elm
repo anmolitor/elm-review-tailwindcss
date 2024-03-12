@@ -31,7 +31,7 @@ view model =
     , body =
         [ Html.div [ class "peer justify-center p-4 dark:bg-slate-50 items-center flex mx-8xl bgd" ]
             [ Html.h1 [ class "peer-checked:left-0 unknown-class p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48" ] [ text model.message ]
-            , Html.p [ class "p-2 p-4", classList [ ( "bg-black peer-open:hover:dark:right-0 block", True ), ( "unknown m-4", False ) ] ] [ text "Some text" ]
+            , Html.p [ class "p-2 p-4 to-slate-300", classList [ ( "bg-black peer-open:hover:dark:right-0 block", True ), ( "unknown m-4", False ) ] ] [ text "Some text" ]
             ]
         ]
     }

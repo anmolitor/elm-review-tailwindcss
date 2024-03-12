@@ -60,10 +60,6 @@ function plugin(options = {}) {
     Declaration(decl) {
       const selector = decl.parent.selector;
       const classNames = selectorToTailwindClassNames(selector);
-      // ignore custom properties
-      if (decl.prop.startsWith("--") || !classNames.length) {
-        return;
-      }
       for (const className of classNames) {
         const previousProps = tailwindClassesAndAffectedProps.get(className);
         if (previousProps) {
