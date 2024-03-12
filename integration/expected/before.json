@@ -13,7 +13,7 @@
       },
       "end": {
         "line": 32,
-        "column": 73
+        "column": 99
       }
     },
     "fix": [
@@ -25,10 +25,10 @@
           },
           "end": {
             "line": 32,
-            "column": 73
+            "column": 99
           }
         },
-        "string": "\"mx-8xl flex items-center justify-center p-4\""
+        "string": "\"bgd peer mx-8xl flex items-center justify-center p-4 dark:bg-slate-50\""
       }
     ],
     "formatted": [
@@ -40,12 +40,12 @@
         "string": "TailwindCss.ConsistentClassOrder",
         "color": "#FF0000"
       },
-      ": Order css class names in a consistent way to improve readability.\n\n31|     , body =\n32|         [ Html.div [ class \"justify-center p-4 items-center flex mx-8xl\" ]\n                               ",
+      ": Order css class names in a consistent way to improve readability.\n\n31|     , body =\n32|         [ Html.div [ class \"peer justify-center p-4 dark:bg-slate-50 items-center flex mx-8xl bgd\" ]\n                               ",
       {
-        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
         "color": "#FF0000"
       },
-      "\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
+      "\n33|             [ Html.h1 [ class \"peer-checked:left-0 unknown-class p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48\" ] [ text model.message ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
     ],
     "suppressed": false,
     "originallySuppressed": false
@@ -64,7 +64,7 @@
       },
       "end": {
         "line": 33,
-        "column": 62
+        "column": 120
       }
     },
     "fix": [
@@ -76,10 +76,10 @@
           },
           "end": {
             "line": 33,
-            "column": 62
+            "column": 120
           }
         },
-        "string": "\"unknown-class known-class p-8\""
+        "string": "\"unknown-class known-class w-48 p-8 peer-checked:left-0 bgd:bg-slate-500 sm:w-12 lg:w-24\""
       }
     ],
     "formatted": [
@@ -91,12 +91,12 @@
         "string": "TailwindCss.ConsistentClassOrder",
         "color": "#FF0000"
       },
-      ": Order css class names in a consistent way to improve readability.\n\n32|         [ Html.div [ class \"justify-center p-4 items-center flex mx-8xl\" ]\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n                                  ",
+      ": Order css class names in a consistent way to improve readability.\n\n32|         [ Html.div [ class \"peer justify-center p-4 dark:bg-slate-50 items-center flex mx-8xl bgd\" ]\n33|             [ Html.h1 [ class \"peer-checked:left-0 unknown-class p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48\" ] [ text model.message ]\n                                  ",
       {
-        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
         "color": "#FF0000"
       },
-      "\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
+      "\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black peer-open:hover:dark:right-0 block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
     ],
     "suppressed": false,
     "originallySuppressed": false
@@ -115,7 +115,7 @@
       },
       "end": {
         "line": 34,
-        "column": 71
+        "column": 100
       }
     },
     "fix": [
@@ -127,10 +127,10 @@
           },
           "end": {
             "line": 34,
-            "column": 71
+            "column": 100
           }
         },
-        "string": "\"block bg-black\""
+        "string": "\"block bg-black peer-open:hover:dark:right-0\""
       }
     ],
     "formatted": [
@@ -142,9 +142,9 @@
         "string": "TailwindCss.ConsistentClassOrder",
         "color": "#FF0000"
       },
-      ": Order css class names in a consistent way to improve readability.\n\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                          ",
+      ": Order css class names in a consistent way to improve readability.\n\n33|             [ Html.h1 [ class \"peer-checked:left-0 unknown-class p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black peer-open:hover:dark:right-0 block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                          ",
       {
-        "string": "^^^^^^^^^^^^^^^^",
+        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
         "color": "#FF0000"
       },
       "\n35|             ]\n\nOrdering css classes is very helpful when using tailwind css, since there are often a lot of them.\nScoped functionality such as dark mode, media queries etc. are better understood if grouped together.\n\nSee this link for more information on the ordering used: https://tailwindcss.com/blog/automatic-class-sorting-with-prettier#how-classes-are-sorted"
@@ -175,7 +175,7 @@
         "string": "TailwindCss.NoCssConflict",
         "color": "#FF0000"
       },
-      ": Css classes 'p-2' and 'p-4' both set the same css property 'padding'. Delete one of them.\n\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                 ",
+      ": Css classes 'p-2' and 'p-4' both set the same css property 'padding'. Delete one of them.\n\n33|             [ Html.h1 [ class \"peer-checked:left-0 unknown-class p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black peer-open:hover:dark:right-0 block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                 ",
       {
         "string": "^^^^^^^^^",
         "color": "#FF0000"
@@ -199,7 +199,7 @@
       },
       "end": {
         "line": 33,
-        "column": 62
+        "column": 120
       }
     },
     "fix": [
@@ -211,10 +211,10 @@
           },
           "end": {
             "line": 33,
-            "column": 62
+            "column": 120
           }
         },
-        "string": "\"p-8 known-class\""
+        "string": "\"peer-checked:left-0 p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48\""
       }
     ],
     "formatted": [
@@ -226,12 +226,12 @@
         "string": "TailwindCss.NoUnknownClasses",
         "color": "#FF0000"
       },
-      ": Css class 'unknown-class' is not in your stylesheet.\n\n32|         [ Html.div [ class \"justify-center p-4 items-center flex mx-8xl\" ]\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n                                  ",
+      ": Css class 'unknown-class' is not in your stylesheet.\n\n32|         [ Html.div [ class \"peer justify-center p-4 dark:bg-slate-50 items-center flex mx-8xl bgd\" ]\n33|             [ Html.h1 [ class \"peer-checked:left-0 unknown-class p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48\" ] [ text model.message ]\n                                  ",
       {
-        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "string": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
         "color": "#FF0000"
       },
-      "\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n\nAssuming things are setup correctly, all your stylesheets went into postcss and our postcss plugin generated a list of valid classes.\nThe above list of classes were not in that list. You can probably just delete the classes and move on.\nWhen in doubt, rerun postcss and elm-review or look for the classes in your stylesheets.\n\nIf you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
+      "\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black peer-open:hover:dark:right-0 block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n\nAssuming things are setup correctly, all your stylesheets went into postcss and our postcss plugin generated a list of valid classes.\nThe above list of classes were not in that list. You can probably just delete the classes and move on.\nWhen in doubt, rerun postcss and elm-review or look for the classes in your stylesheets.\n\nIf you have any styles external to your application, e.g. your Elm app is not the entire website and there are some shared styles, you should probably disable this rule."
     ],
     "suppressed": false,
     "originallySuppressed": false
@@ -246,11 +246,11 @@
     "region": {
       "start": {
         "line": 34,
-        "column": 83
+        "column": 112
       },
       "end": {
         "line": 34,
-        "column": 96
+        "column": 125
       }
     },
     "fix": [
@@ -258,11 +258,11 @@
         "range": {
           "start": {
             "line": 34,
-            "column": 83
+            "column": 112
           },
           "end": {
             "line": 34,
-            "column": 96
+            "column": 125
           }
         },
         "string": "\"m-4\""
@@ -277,7 +277,7 @@
         "string": "TailwindCss.NoUnknownClasses",
         "color": "#FF0000"
       },
-      ": Css class 'unknown' is not in your stylesheet.\n\n33|             [ Html.h1 [ class \"unknown-class p-8 known-class\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                                                      ",
+      ": Css class 'unknown' is not in your stylesheet.\n\n33|             [ Html.h1 [ class \"peer-checked:left-0 unknown-class p-8 known-class bgd:bg-slate-500 sm:w-12 lg:w-24 w-48\" ] [ text model.message ]\n34|             , Html.p [ class \"p-2 p-4\", classList [ ( \"bg-black peer-open:hover:dark:right-0 block\", True ), ( \"unknown m-4\", False ) ] ] [ text \"Some text\" ]\n                                                                                                                   ",
       {
         "string": "^^^^^^^^^^^^^",
         "color": "#FF0000"

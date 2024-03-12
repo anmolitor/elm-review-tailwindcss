@@ -108,29 +108,40 @@ expressionVisitor =
                     String.split " " classString
                         |> List.filter (not << String.isEmpty)
 
-                classNamePropTuples =
+                modifiers className =
+                    String.split ":" className
+                        |> List.tail
+                        |> Maybe.withDefault []
+                        |> Set.fromList
+
+                classNamesWithMetadata =
                     List.map
                         (\className ->
-                            ( className
-                            , Dict.get className ctx.props |> Maybe.withDefault Set.empty
-                            )
+                            { name = className
+                            , props =
+                                Dict.get className ctx.props |> Maybe.withDefault Set.empty
+                            , modifiers = modifiers className
+                            }
                         )
                         classNames
             in
-            uniquePairs classNamePropTuples
+            uniquePairs classNamesWithMetadata
                 |> List.concatMap
-                    (\( ( className1, props1 ), ( className2, props2 ) ) ->
+                    (\( c1, c2 ) ->
                         let
                             propsIntersection =
-                                Set.intersect props1 props2
+                                Set.intersect c1.props c2.props
+
+                            modifierEquality =
+                                c1.modifiers == c2.modifiers
                         in
-                        if Set.isEmpty propsIntersection then
+                        if Set.isEmpty propsIntersection || not modifierEquality then
                             []
 
                         else
                             [ Rule.error
                                 (Internal.cssConflictError
-                                    { conflictingClasses = ( className1, className2 ), conflictingProperties = Set.toList propsIntersection }
+                                    { conflictingClasses = ( c1.name, c2.name ), conflictingProperties = Set.toList propsIntersection }
                                 )
                                 range
                             ]

@@ -1,3 +1,4 @@
+import { createParser } from "css-selector-parser";
 import * as fs from "fs";
 import { createRequire } from "module";
 import * as path from "path";
@@ -47,6 +48,7 @@ function plugin(options = {}) {
    * @type {Map<string, string[]>} tailwindClassesAndAffectedProps
    */
   const tailwindClassesAndAffectedProps = new Map();
+
   const sourceFiles = new Set();
   return {
     postcssPlugin: "elm-review-tailwind-css-plugin",
@@ -56,17 +58,19 @@ function plugin(options = {}) {
      */
     Declaration(decl) {
       const selector = decl.parent.selector;
-      const className = selectorToTailwindClassName(selector);
+      const classNames = selectorToTailwindClassNames(selector);
       // ignore custom properties
-      if (decl.prop.startsWith("--") || !className) {
+      if (decl.prop.startsWith("--") || !classNames.length) {
         return;
       }
-      const previousProps = tailwindClassesAndAffectedProps.get(className);
-      if (previousProps) {
-        previousProps.push(decl.prop);
-        return;
+      for (const className of classNames) {
+        const previousProps = tailwindClassesAndAffectedProps.get(className);
+        if (previousProps) {
+          previousProps.push(decl.prop);
+          continue;
+        }
+        tailwindClassesAndAffectedProps.set(className, [decl.prop]);
       }
-      tailwindClassesAndAffectedProps.set(className, [decl.prop]);
     },
     /**
      *
@@ -147,26 +151,38 @@ classProps =
 /**
  *
  * @param {string} selector
- * @returns {string | undefined}
+ * @returns {string[]}
  */
-function selectorToTailwindClassName(selector) {
-  if (!selector.startsWith(".")) {
-    return undefined;
-  }
-  let className = "";
-  let escape = false;
-  for (const char of selector.substring(1)) {
-    if (char === "\\") {
-      escape = true;
-      continue;
+export function selectorToTailwindClassNames(selector) {
+  const parse = createParser({ syntax: "progressive" });
+  const tree = parse(selector);
+
+  const items = [];
+  /**
+   *
+   * @param {import('css-selector-parser').AstRule} rule
+   */
+  function collectItemsFromRule(rule) {
+    if (rule.nestedRule) {
+      collectItemsFromRule(rule.nestedRule);
     }
-    if (char === ":" && !escape) {
-      return className;
+    items.push(...rule.items);
+    for (const item of rule.items) {
+      const nestedItemRules = item.argument?.rules ?? [];
+      collectItemsFromRules(nestedItemRules);
     }
-    className += char;
-    escape = false;
   }
-  return className;
+
+  function collectItemsFromRules(rules) {
+    for (const rule of rules) {
+      collectItemsFromRule(rule);
+    }
+  }
+
+  collectItemsFromRules(tree.rules);
+  return items
+    .filter((item) => item.type === "ClassName")
+    .map((item) => item.name);
 }
 
 plugin.postcss = true;
