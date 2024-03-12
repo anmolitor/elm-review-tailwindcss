@@ -10,7 +10,7 @@ npm run build
 elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/before.json -
 echo "Initial run went as expected."
 # Automatically fix all fixable errors
-echo 'y' | elm-review --fix-all || true
+yes | elm-review --fix-all || true
 echo "Fixable errors were fixed."
 # reports all errors that are not fixable
 elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/after.json -

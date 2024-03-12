@@ -4,9 +4,9 @@ Provides [`elm-review`](https://package.elm-lang.org/packages/jfmengels/elm-revi
 
 ## Provided rules
 
-- [`TailwindCss.NoCssConflict`](https://package.elm-lang.org/packages/anmolitor/elm-review-tailwindcss/1.0.0/TailwindCss-NoCssConflict) - Reports if multiple classes in a single class string modify the same css properties.
-- [`TailwindCss.NoUnknownClasses`](https://package.elm-lang.org/packages/anmolitor/elm-review-tailwindcss/1.0.0/TailwindCss-NoUnknownClasses) - Reports if classes are used that are not known at compile-time.
-- [`TailwindCss.ConsistentClassOrder`](https://package.elm-lang.org/packages/anmolitor/elm-review-tailwindcss/1.0.0/TailwindCss-ConsistentClassOrder) - Reports if classes are not ordered according to the TailwindCSS recommendations.
+- [`TailwindCss.NoCssConflict`](https://package.elm-lang.org/packages/anmolitor/elm-review-tailwindcss/1.0.1/TailwindCss-NoCssConflict/) - Reports if multiple classes in a single class string modify the same css properties.
+- [`TailwindCss.NoUnknownClasses`](https://package.elm-lang.org/packages/anmolitor/elm-review-tailwindcss/1.0.1/TailwindCss-NoUnknownClasses/) - Reports if classes are used that are not known at compile-time.
+- [`TailwindCss.ConsistentClassOrder`](https://package.elm-lang.org/packages/anmolitor/elm-review-tailwindcss/1.0.1/TailwindCss-ConsistentClassOrder/) - Reports if classes are not ordered according to the TailwindCSS recommendations.
 
 ## Configuration
 
