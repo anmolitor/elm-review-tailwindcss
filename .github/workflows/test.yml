@@ -109,10 +109,7 @@ jobs:
           # package-lock.json does not, the postinstall script needs running
           # but this step won’t.
           NO_ELM_TOOLING_INSTALL: 1
-        run: |
-          npm ci
-          cd postcss
-          npm ci
+        run: npm ci &6 cd postcss && npm ci
 
       # Install tools from elm-tooling.json, unless we restored them from
       # cache. package-lock.json and elm-tooling.json can change independently,
