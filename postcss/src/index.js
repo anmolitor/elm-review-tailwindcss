@@ -50,6 +50,7 @@ function plugin(options = {}) {
   const tailwindClassesAndAffectedProps = new Map();
 
   const sourceFiles = new Set();
+
   return {
     postcssPlugin: "elm-review-tailwind-css-plugin",
     /**

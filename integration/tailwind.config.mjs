@@ -8,7 +8,7 @@ const someVariantPlugin = plugin(({ addVariant }) => {
 export default {
   content: ["./src/**/*.elm", "index.html"],
   darkMode: "class",
-  plugins: [p],
+  plugins: [someVariantPlugin],
   theme: {
     extend: {
       spacing: {
