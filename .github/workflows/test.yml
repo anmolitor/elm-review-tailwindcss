@@ -64,11 +64,15 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Setup jq
+        uses: dcarbone/install-jq-action@v2
+        with:
+          version: "1.6"
+
       - name: Run integration test
         run: |
           cd integration
           npm ci
-          apt-get install jq -y
           jq --version
           ./run-integration-test.sh
 
