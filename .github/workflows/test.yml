@@ -67,8 +67,7 @@ jobs:
           npm ci
           ./run-integration-test.sh
 
-
-  publish:
+  publish-elm-review-rule:
     needs: [test] # make sure all your other jobs succeed before trying to publish
 
     # The type of runner that the job will run on
@@ -110,7 +109,10 @@ jobs:
           # package-lock.json does not, the postinstall script needs running
           # but this step won’t.
           NO_ELM_TOOLING_INSTALL: 1
-        run: npm ci
+        run: |
+          npm ci
+          cd postcss
+          npm ci
 
       # Install tools from elm-tooling.json, unless we restored them from
       # cache. package-lock.json and elm-tooling.json can change independently,
@@ -141,3 +143,40 @@ jobs:
           # Token provided by GitHub
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-elm: ./node_modules/.bin/elm
+
+  publish-postcss-plugin:
+    needs: [test] # make sure all your other jobs succeed before trying to publish
+
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: lts/*
+
+      # Re-use node_modules between runs until package-lock.json changes.
+      - name: Cache node_modules
+        id: internal-cache-node_modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: internal-node_modules-ubuntu-latest.x-${{ hashFiles('package-lock.json') }}
+
+      - name: Install npm dependencies
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: cd postcss && npm ci
+
+      - name: npm publish
+        run: |
+          cd postcss
+          npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
+          npm publish --access public || true
+        env:
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
