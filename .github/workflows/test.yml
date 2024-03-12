@@ -73,8 +73,15 @@ jobs:
         run: |
           cd integration
           npm ci
-          jq --version
-          ./run-integration-test.sh
+          npm run build
+          npx elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/before.json -
+          echo "Initial run went as expected."
+          yes | elm-review --fix-all || true
+          echo "Fixable errors were fixed."
+          npx elm-review --report=json | jq -M '.errors[].errors | sort_by(.rule, .region.start.line, .region.start.column)' | diff expected/after.json -
+          echo "Second run went as expected."
+          diff src/Main.elm expected/Main.elm
+          echo "Fixes were correct."
 
   publish-elm-review-rule:
     needs: [test] # make sure all your other jobs succeed before trying to publish
