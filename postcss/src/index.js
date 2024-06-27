@@ -58,6 +58,9 @@ function plugin(options = {}) {
      * @param {import('postcss').Declaration} decl
      */
     Declaration(decl) {
+      if (isProblematicCssForSelectorParser(decl)) {
+        return;
+      }
       const selector = decl.parent.selector;
       const classNames = selectorToTailwindClassNames(selector);
       for (const className of classNames) {
@@ -180,6 +183,20 @@ export function selectorToTailwindClassNames(selector) {
   return items
     .filter((item) => item.type === "ClassName")
     .map((item) => item.name);
+}
+
+/**
+ *
+ * @param {import('postcss').Declaration} decl
+ */
+function isProblematicCssForSelectorParser(decl) {
+  if (!decl.parent) {
+    return false;
+  }
+  if (decl.parent.type === "atrule" && decl.parent.name === "keyframes") {
+    return true;
+  }
+  return isProblematicCssForSelectorParser(decl.parent);
 }
 
 plugin.postcss = true;

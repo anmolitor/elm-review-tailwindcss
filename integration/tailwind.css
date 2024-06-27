@@ -7,3 +7,14 @@
 .known-class {
   background-color: aliceblue;
 }
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.5);
+  }
+}
