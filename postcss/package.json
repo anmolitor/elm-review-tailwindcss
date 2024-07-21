@@ -3,7 +3,7 @@
   "type": "module",
   "main": "src/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/anmolitor/elm-review-tailwindcss.git"
@@ -16,7 +16,6 @@
   ],
   "author": "Andreas Molitor",
   "scripts": {
-    "build": "tsc && ",
     "test": "vitest"
   },
   "dependencies": {
