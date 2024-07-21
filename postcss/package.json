@@ -16,6 +16,7 @@
   ],
   "author": "Andreas Molitor",
   "scripts": {
+    "build": "tsc && ",
     "test": "vitest"
   },
   "dependencies": {

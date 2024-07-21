@@ -1,7 +1,15 @@
-import { createParser } from "css-selector-parser";
+import {
+  AstPseudoClass,
+  AstRule,
+  AstSelector,
+  createParser,
+} from "css-selector-parser";
 import * as fs from "fs";
 import { createRequire } from "module";
 import * as path from "path";
+import { AtRule, Declaration, Document as PostcssDocument } from "postcss";
+import { ContainerWithChildren } from "postcss/lib/container";
+import { Config } from "tailwindcss";
 import * as url from "url";
 
 let localRequire = createRequire(import.meta.url);
@@ -24,16 +32,16 @@ const createContext = localRequire(
 
 const resolveConfig = localRequire(path.join(pkgDir, "resolveConfig"));
 
+interface Options {
+  outputSourceDir?: string;
+  outputModuleName?: string;
+  tailwindConfig?: Config;
+}
 /**
- * @typedef {Object} Options
- * @property {string} [outputSourceDir] - defaults to "review/src",
- * @property {string} [outputModuleName] - defaults to "TailwindCss.ClassOrder",
- * @property {import('tailwindcss').Config} [tailwindConfig] - defaults to {},
- *
  * @param {Options} options
  * @returns {import('postcss').Plugin}
  */
-function plugin(options = {}) {
+function plugin(options: Options = {}) {
   const {
     outputSourceDir = "review/src",
     outputModuleName = "TailwindCss.ClassOrder",
@@ -44,24 +52,17 @@ function plugin(options = {}) {
     outputModuleName.replace(".", path.sep) + ".elm"
   );
 
-  /**
-   * @type {Map<string, string[]>} tailwindClassesAndAffectedProps
-   */
-  const tailwindClassesAndAffectedProps = new Map();
+  const tailwindClassesAndAffectedProps = new Map<string, string[]>();
 
   const sourceFiles = new Set();
 
   return {
     postcssPlugin: "elm-review-tailwind-css-plugin",
-    /**
-     *
-     * @param {import('postcss').Declaration} decl
-     */
-    Declaration(decl) {
+    Declaration(decl: Declaration) {
       if (isProblematicCssForSelectorParser(decl)) {
         return;
       }
-      const selector = decl.parent.selector;
+      const selector = (decl as any).parent.selector;
       const classNames = selectorToTailwindClassNames(selector);
       for (const className of classNames) {
         const previousProps = tailwindClassesAndAffectedProps.get(className);
@@ -72,19 +73,16 @@ function plugin(options = {}) {
         tailwindClassesAndAffectedProps.set(className, [decl.prop]);
       }
     },
-    /**
-     *
-     * @param {import('postcss').Document} document
-     */
-    Document(document) {
-      const sourceFile = document.source?.input.from;
-      if (sourceFile) {
-        sourceFiles.add(document.source.input.from);
+    Document(document: PostcssDocument) {
+      if (!document.source) {
+        return;
       }
+      const sourceFile = document.source.input.from;
+      sourceFiles.add(document.source.input.from);
     },
     OnceExit() {
       const ctx = createContext(resolveConfig(tailwindConfig));
-      const classOrder = ctx.getClassOrder(
+      const classOrder: [string, number][] = ctx.getClassOrder(
         Array.from(tailwindClassesAndAffectedProps.keys())
       );
 
@@ -148,32 +146,26 @@ classProps =
   };
 }
 
-/**
- *
- * @param {string} selector
- * @returns {string[]}
- */
-export function selectorToTailwindClassNames(selector) {
+export function selectorToTailwindClassNames(selector: string): string[] {
   const parse = createParser({ syntax: "progressive" });
   const tree = parse(selector);
 
-  const items = [];
-  /**
-   *
-   * @param {import('css-selector-parser').AstRule} rule
-   */
-  function collectItemsFromRule(rule) {
+  const items: AstRule["items"] = [];
+
+  function collectItemsFromRule(rule: AstRule) {
     if (rule.nestedRule) {
       collectItemsFromRule(rule.nestedRule);
     }
     items.push(...rule.items);
     for (const item of rule.items) {
-      const nestedItemRules = item.argument?.rules ?? [];
+      const nestedItemRules =
+        ((item as AstPseudoClass).argument as AstSelector | undefined)?.rules ??
+        [];
       collectItemsFromRules(nestedItemRules);
     }
   }
 
-  function collectItemsFromRules(rules) {
+  function collectItemsFromRules(rules: AstRule[]) {
     for (const rule of rules) {
       collectItemsFromRule(rule);
     }
@@ -182,21 +174,22 @@ export function selectorToTailwindClassNames(selector) {
   collectItemsFromRules(tree.rules);
   return items
     .filter((item) => item.type === "ClassName")
-    .map((item) => item.name);
+    .map((item) => (item as { name: string }).name);
 }
 
-/**
- *
- * @param {import('postcss').Declaration} decl
- */
-function isProblematicCssForSelectorParser(decl) {
+function isProblematicCssForSelectorParser(decl: Declaration) {
   if (!decl.parent) {
     return false;
   }
-  if (decl.parent.type === "atrule" && decl.parent.name === "keyframes") {
+  if (
+    decl.parent.type === "atrule" &&
+    (decl.parent as AtRule).name === "keyframes"
+  ) {
     return true;
   }
-  return isProblematicCssForSelectorParser(decl.parent);
+  return isProblematicCssForSelectorParser(
+    decl.parent as unknown as Declaration
+  );
 }
 
 plugin.postcss = true;

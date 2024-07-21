@@ -1,28 +1,24 @@
+import { Declaration, Document as PostcssDocument } from "postcss";
+import { Config } from "tailwindcss";
+interface Options {
+    outputSourceDir?: string;
+    outputModuleName?: string;
+    tailwindConfig?: Config;
+}
 /**
- * @typedef {Object} Options
- * @property {string} [outputSourceDir] - defaults to "review/src",
- * @property {string} [outputModuleName] - defaults to "TailwindCss.ClassOrder",
- * @property {import('tailwindcss').Config} [tailwindConfig] - defaults to {},
- *
  * @param {Options} options
  * @returns {import('postcss').Plugin}
  */
-export function elmReviewTailwindCssPlugin(options?: Options): import('postcss').Plugin;
-export namespace elmReviewTailwindCssPlugin {
-    const postcss: boolean;
-}
-export type Options = {
-    /**
-     * - defaults to "review/src",
-     */
-    outputSourceDir?: string | undefined;
-    /**
-     * - defaults to "TailwindCss.ClassOrder",
-     */
-    outputModuleName?: string | undefined;
-    /**
-     * - defaults to {},
-     */
-    tailwindConfig?: import("tailwindcss/types/config").Config | undefined;
+declare function plugin(options?: Options): {
+    postcssPlugin: string;
+    Declaration(decl: Declaration): void;
+    Document(document: PostcssDocument): void;
+    OnceExit(): void;
 };
+declare namespace plugin {
+    var postcss: boolean;
+}
+export declare function selectorToTailwindClassNames(selector: string): string[];
+export declare const elmReviewTailwindCssPlugin: typeof plugin;
+export {};
 //# sourceMappingURL=index.d.ts.map
