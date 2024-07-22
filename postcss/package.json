@@ -1,7 +1,7 @@
 {
   "name": "elm-review-tailwindcss-postcss-plugin",
   "type": "module",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "version": "1.0.7",
   "repository": {
