@@ -1,5 +1,5 @@
 import tailwindcss from "tailwindcss";
-import { elmReviewTailwindCssPlugin } from "../postcss/src/index.js";
+import { elmReviewTailwindCssPlugin } from "../postcss/dist/index.js";
 import tailwindConfig from "./tailwind.config.mjs";
 
 export default {

@@ -134,9 +134,9 @@ classProps =
         [ ${Array.from(tailwindClassesAndAffectedProps.entries())
           .map(
             ([className, cssProps]) =>
-              `( "${className}", Set.fromList [ ${cssProps
-                .map((cssProp) => `"${cssProp}"`)
-                .join(", ")} ] )`
+              `( "${className}", Set.fromList [ ${[
+                ...new Set(cssProps.map((cssProp) => `"${cssProp}"`)),
+              ].join(", ")} ] )`
           )
           .join("\n        , ")}
         ]
